@@ -1,0 +1,20 @@
+Instalaciones basicas Globales.
+
+npm install -g @angular/cli
+Verificar version:
+ng version
+
+Crear nuevo proyecto de Angular:
+ng new frontend-clinica
+
+cree una interfaz de Usuarios:
+ng g i modelos/usuario
+
+Crear el Servicio de Usuarios:
+ng g s servicios/usuarios
+
+levantar el servidor de Angular:
+ng serve -o
+
+En el Navegador deberia verse el json que responde el backend-clinica:
+http://localhost:4200/
