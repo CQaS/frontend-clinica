@@ -8,7 +8,7 @@ import { UsuarioProcesado } from '../modelos/usuario';
 })
 export class UsuariosServicio {
   private readonly http = inject(HttpClient);
-  private readonly urlApi = 'http://localhost:3000/api/usuarios';
+  private readonly urlApi = '/api/v1/usuarios';
 
   obtenerUsuarios(): Observable<UsuarioProcesado[]> {
     return this.http.get<UsuarioProcesado[]>(this.urlApi);
