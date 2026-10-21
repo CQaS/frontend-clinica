@@ -1,0 +1,10 @@
+<div style="padding: 2rem;">
+  <h2>Panel de Paciente - Prueba de Conexión</h2>
+  <p>Listando usuarios desde el backend:</p>
+
+  <ul>
+    <li *ngFor="let u of usuarios">
+      <strong>{{ u.nombres }} {{ u.apellidos }}</strong> - {{ u.email }}
+    </li>
+  </ul>
+</div>
