@@ -1,12 +1,22 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(), // <-- Agregar esta línea
+    provideHttpClient(),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+      },
+    }),
   ],
 };

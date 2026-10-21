@@ -1,20 +1,2 @@
-<div style="padding: 20px; font-family: sans-serif;">
-  <h1>Listado de Usuarios - Clínica</h1>
-
-  <div *ngIf="usuarios.length === 0">Cargando usuarios...</div>
-
-  <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-    <div *ngFor="let usuario of usuarios"
-      style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background-color: #f9f9f9;">
-      <h3>{{ usuario.nombres }} {{ usuario.apellidos }}</h3>
-      <p><strong>Rol:</strong> {{ usuario.rol }}</p>
-      <p><strong>Email:</strong> {{ usuario.email }}</p>
-      <p><em>{{ usuario.mensajeBienvenida }}</em></p>
-
-      <h4>Permisos:</h4>
-      <ul>
-        <li *ngFor="let permiso of usuario.permisos">{{ permiso }}</li>
-      </ul>
-    </div>
-  </div>
-</div>
+<router-outlet />
+<p-toast />

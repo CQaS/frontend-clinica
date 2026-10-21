@@ -1,27 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UsuariosServicio } from './servicios/usuarios.service';
-import { UsuarioProcesado } from './modelos/usuario';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [RouterOutlet, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
+  providers: [MessageService],
 })
-export class AppComponent implements OnInit {
-  private readonly usuariosServicio = inject(UsuariosServicio);
-  public usuarios: UsuarioProcesado[] = [];
-
-  ngOnInit(): void {
-    this.usuariosServicio.obtenerUsuarios().subscribe({
-      next: (data) => {
-        this.usuarios = data;
-      },
-      error: (err) => {
-        console.error('Error al obtener usuarios:', err);
-      },
-    });
-  }
+export class AppComponent {
+  protected readonly titulo_app = signal('frontend-clinica');
 }
