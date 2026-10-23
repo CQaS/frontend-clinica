@@ -18,7 +18,7 @@ export class ReservarTurnoPaciente implements OnInit{
     horaSeleccionada:string ='';
 
     medicos:string[]=['Dr. Pérez', 'Dra. Gómez', 'Dr. Rodríguez'];
-    horariosDisponibles:string[]=['09:00', '10:00', '11:00', '14:00', '15:00'];
+    horariosDisponibles:string[]=['08:00', '09:00', '10:00', '11:00', '14:00', '15:00'];
 
     minFecha:string = '';
     maxFecha:string = '';
@@ -42,10 +42,13 @@ export class ReservarTurnoPaciente implements OnInit{
             return;
         }
 
-    const nuevoTurno = {
-        medico: this.medicoSeleccionado,
-        fecha: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00`,
-        estado: 'Active'
+        let idMedicoNum = 1;
+        if (this.medicoSeleccionado === 'Dra. Gómez') idMedicoNum = 2;
+        if (this.medicoSeleccionado === 'Dr. Rodríguez') idMedicoNum = 3;
+
+        const nuevoTurno = {
+        idMedico: idMedicoNum,
+        fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00.000Z`, 
     };
 
     this.reservasService.crearTurno(nuevoTurno).subscribe({

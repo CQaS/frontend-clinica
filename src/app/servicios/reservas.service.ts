@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ReservasService {
-    private apiUrl = 'http://localhost:3000/api/reservas';
+    private apiUrl = '/api/v1/reservas';
 
     constructor(private http: HttpClient) {}
 
@@ -15,7 +15,14 @@ export class ReservasService {
     }
 
     crearTurno(turnoData:any): Observable<any> {
-        return this.http.post<any>(this.apiUrl, turnoData);
+        const token = localStorage.getItem('token');
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${'token'}`
+        });
+
+        return this.http.post<any>(this.apiUrl, turnoData, { headers });
     }
 
     cancelarTurno(id:string): Observable<any> {

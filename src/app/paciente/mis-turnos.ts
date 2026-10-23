@@ -37,12 +37,11 @@ export class MisTurnosPaciente implements OnInit {
     const fechaTurno = new Date(turno.fecha);
     const hoy = new Date();
 
-    const mismoDia = 
-    fechaTurno.getDate() === hoy.getDate()&&
-    fechaTurno.getMonth() === hoy.getMonth()&&
-    fechaTurno.getFullYear() === hoy.getFullYear();
+    fechaTurno.setHours(0,0,0,0);
+    hoy.setHours(0,0,0,0);
 
-    return !mismoDia;
+    return fechaTurno.getTime() > hoy.getTime();
+    
   }
 
   cancelarTurno(id:string){
