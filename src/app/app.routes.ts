@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { MisTurnosPaciente } from './paciente/mis-turnos';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   // Redirección inicial → Login
@@ -26,19 +27,11 @@ export const routes: Routes = [
       { path: 'mis-turnos', component: MedicoMisTurnosComponent },
       { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
     ],
-  },
+  },*/
 
   // ---------- ADMINISTRADOR ----------
-  {
-    path: 'admin',
-    canActivate: [AuthGuard], // control de acceso a rutas privada
-    children: [
-      { path: 'turnos', component: AdminTurnosComponent },
-      { path: 'valores-consulta', component: AdminValoresConsultaComponent },
-      { path: '', redirectTo: 'turnos', pathMatch: 'full' },
-    ],
-  }, */
+  { path: 'admin-dashboard', 
+    component: AdminDashboardComponent
+  },
 
-  // Cualquier ruta desconocida → Login
-  { path: '**', redirectTo: 'login' },
 ];

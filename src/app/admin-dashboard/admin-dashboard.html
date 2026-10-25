@@ -1,0 +1,131 @@
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+    <h2>Panel de Administración - Clínica</h2>
+    
+    <!--gestion de medicos y pacientes-->
+    <div style="margin-bottom: 40px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+    <h3>Médicos y Valor de Consulta</h3>
+    <p *ngIf="medicos.length === 0">No hay médicos registrados.</p>
+    <table style="width: 100%; color: black; background: white; padding: 10px;">
+        <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Valor Actual</th>
+        <th>Acción</th>
+    </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let medico of medicos">
+        <td>{{ medico.id }}</td>
+        <td>{{ medico.nombre }}</td>
+        <td>${{ medico.valor_consulta }}</td>
+        <td>
+
+        <input 
+        type="number"
+        #precio
+        placeholder="Nuevo valor"
+        min="1"
+        step="1"
+        />
+        <button
+        (click)="actualizarPrecio(medico.id, precio.valueAsNumber)"
+        [disabled]="!precio.value || precio.valueAsNumber <= 0"
+        >
+        Actualizar
+    </button>
+    </td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+<!--gestion de turnos-->
+<div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+    <h3>Listado de Turnos</h3>
+    <p *ngIf="turnos.length === 0">No hay turnos registrados.</p>
+    <table style="width: 100%; color: black; background: white; padding: 10px;">
+        <thead>
+    <tr>
+        <th>ID del turno</th>
+        <th>Fecha y hora</th>
+        <th>Médico</th>
+        <th>Paciente</th>
+        <th>Valor de consulta</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+    <tr *ngFor="let turno of turnos">
+        <td>{{ turno.id }}</td>
+        <td>{{ turno.fechaHora | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ turno.nombreMedico }}</td>
+        <td>{{ turno.nombrePaciente }}</td>
+        <td>${{ turno.valorConsulta }}</td>
+        <td>
+            <span [style.color]="turno.estado === 'CANCELADO' ? 'red' : 'green'">
+                {{ turno.estado }}
+            </span>
+        </td>
+        <td>
+        <button
+        (click)="cancelarTurno(turno.id)"
+        [disabled]="!puedeCancelar(turno)"
+        >
+        Cancelar
+    </button>
+    </td>
+    </tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- Reservar Nuevo Turno -->
+<div style="margin-top: 40px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+    <h3>Reservar Nuevo Turno</h3>
+    <form (ngSubmit)="reservarTurnoForm()" #formTurno="ngForm">
+
+    <label for="idMedico">Médico:</label>
+    <select
+    id="idMedico"
+    [(ngModel)]="nuevoTurno.idMedico"
+    name="idMedico"
+    required
+    >
+    <option [ngValue]="null" disabled>Seleccioná un médico</option>
+      <option *ngFor="let medico of medicos" [ngValue]="medico.id">
+        {{ medico.nombre }}
+    </option>
+    </select>
+
+    <label for="idPaciente">ID del paciente:</label>
+    <input
+    id="idPaciente"
+    type="number"
+    [(ngModel)]="nuevoTurno.idPaciente"
+    name="idPaciente"
+    min="1"
+    required
+    />
+
+    <label for="fechaHora">Fecha y hora:</label>
+    <input
+    id="fechaHora"
+    type="datetime-local"
+    [(ngModel)]="nuevoTurno.fechaHora"
+    name="fechaHora"
+    [min]="fechaMinima"
+    [max]="fechaMaxima"
+    required
+    />
+    <button
+    type="submit"
+    [disabled]="formTurno.invalid || !horarioValido()"
+    >
+    Reservar turno
+</button>
+</form>
+</div>
