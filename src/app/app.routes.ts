@@ -2,11 +2,13 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { MisTurnosPaciente } from './paciente/mis-turnos';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
+import { ReservarTurnoPaciente } from './paciente/reservar-turno';
 
 export const routes: Routes = [
   // Redirección inicial → Login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'reservar-turno', component: ReservarTurnoPaciente},
 
   // ---------- PACIENTE ----------
   {
