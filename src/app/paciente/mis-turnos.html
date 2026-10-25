@@ -1,10 +1,36 @@
 <div style="padding: 2rem;">
-  <h2>Panel de Paciente - Prueba de Conexión</h2>
-  <p>Listando usuarios desde el backend:</p>
+  <div class="container mt-4">
+  <h2>Mis Turnos</h2>
 
-  <ul>
-    <li *ngFor="let u of usuarios">
-      <strong>{{ u.nombres }} {{ u.apellidos }}</strong> - {{ u.email }}
-    </li>
-  </ul>
+    <a routerLink="/reservar-turno" class="btn btn-success mb-3">+ Reservar Nuevo Turno</a>
+
+  <div *ngIf="turnos.length === 0" class="alert alert-info">
+    No tenes turnos registrados.
+  </div>
+
+  <table class="table table-striped" *ngIf="turnos.length > 0">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Médico</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnos">
+        <td>{{ turno.fecha | date:'short}}</td>
+        <td>{{ turno.medico }}</td>
+        <td>{{ turno.estado }}</td>
+        <td>
+          <button
+            class="btn btn-danger btn-sm"
+            [disabled]="!puedeCancelar(turno)"
+            (click)="cancelarTurno(turno.id)">
+            Cancelar Turno
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -1,0 +1,37 @@
+<div class="container mt-4">
+    <h2>Reservar Nuevo Turno</h2>
+
+    <form (ngSubmit)="confirmarReserva()" class="mt-3">
+        <div class="mb-3">
+            <label for="medico" class="form-label">Seleccionar Médico:</label>
+            <select id="medico" class="form-select" [(ngModel)]="medicoSeleccionado" name="medico" required>
+                <option value="" disabled>Seleccione un profesional</option>
+                <option *ngFor="let m of medicos" [value]="m">{{ m}}</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha del Turno:</label>
+            <input
+                type="date"
+                id="fecha"
+                class="form-control"
+                [(ngModel)]="fechaSeleccionada"
+                name="fecha"
+                [min]="minFecha"
+                [max]="maxFecha"
+                required>
+                <div class="form-text">Solo se permiten reservas dentro de los próximos 30 días.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="hora" class="form-label">Horario:</label>
+            <select id="hora" class="form-select" [(ngModel)]="horaSeleccionada" name="hora" required>
+                <option value="" disabled>Seleccione un horario</option>
+                <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
+    </form>
+</div>
