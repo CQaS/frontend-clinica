@@ -1,23 +1,23 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
+import { Login } from './auth/login/login'; // <-- Apuntamos al nuevo componente modular
 import { MisTurnosPaciente } from './paciente/mis-turnos';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ReservarTurnoPaciente } from './paciente/reservar-turno';
-import { roleGuard } from './guards/role.guard'; // <-- Importamos nuestro guard
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   // Redirección inicial → Login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: Login },
 
   // ---------- PACIENTE ----------
   {
     path: 'paciente',
-    canActivate: [roleGuard], // <-- Activamos el control de acceso
-    data: { role: 'PACIENTE' }, // <-- Definimos el rol permitido
+    canActivate: [roleGuard],
+    data: { role: 'PACIENTE' },
     children: [
       { path: 'mis-turnos', component: MisTurnosPaciente },
-      { path: 'reservar', component: ReservarTurnoPaciente }, // Corregido para usar ReservarTurnoPaciente
+      { path: 'reservar', component: ReservarTurnoPaciente },
       { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
     ],
   },
@@ -28,7 +28,7 @@ export const routes: Routes = [
     canActivate: [roleGuard],
     data: { role: 'MEDICO' },
     children: [
-      { path: 'mis-turnos', component: MisTurnosPaciente }, // Cambiar por tu componente de médico cuando lo tengas
+      { path: 'mis-turnos', component: MisTurnosPaciente },
       { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
     ],
   },
