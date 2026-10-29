@@ -1,39 +1,46 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
+import { Login } from './auth/login/login'; // <-- Apuntamos al nuevo componente modular
 import { MisTurnosPaciente } from './paciente/mis-turnos';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ReservarTurnoPaciente } from './paciente/reservar-turno';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   // Redirección inicial → Login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'reservar-turno', component: ReservarTurnoPaciente},
+  { path: 'login', component: Login },
 
   // ---------- PACIENTE ----------
   {
     path: 'paciente',
-    //canActivate: [AuthGuard], // control de acceso a rutas privadas
+    canActivate: [roleGuard],
+    data: { role: 'PACIENTE' },
     children: [
       { path: 'mis-turnos', component: MisTurnosPaciente },
-      { path: 'reservar', component: MisTurnosPaciente },
+      { path: 'reservar', component: ReservarTurnoPaciente },
       { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
     ],
   },
 
-  /* // ---------- MÉDICO ----------
+  // ---------- MÉDICO ----------
   {
     path: 'medico',
-    canActivate: [AuthGuard], // control de acceso a rutas privada
+    canActivate: [roleGuard],
+    data: { role: 'MEDICO' },
     children: [
-      { path: 'mis-turnos', component: MedicoMisTurnosComponent },
+      { path: 'mis-turnos', component: MisTurnosPaciente },
       { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
     ],
-  },*/
-
-  // ---------- ADMINISTRADOR ----------
-  { path: 'admin-dashboard', 
-    component: AdminDashboardComponent
   },
 
+  // ---------- ADMINISTRADOR ----------
+  { 
+    path: 'admin-dashboard', 
+    component: AdminDashboardComponent,
+    canActivate: [roleGuard],
+    data: { role: 'ADMINISTRADOR' }
+  },
+
+  // Ruta comodín para redirigir URLs mal escritas al login
+  { path: '**', redirectTo: 'login' }
 ];
