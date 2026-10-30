@@ -1,0 +1,42 @@
+<div class="agenda-container" style="padding: 20px;">
+  <h2>Agenda Médica - Mis Turnos</h2>
+
+  <!-- Selector de fecha -->
+  <div class="filtro-fecha" style="margin-bottom: 20px;">
+    <label for="fechaTurnos">Seleccionar fecha: </label>
+    <input type="date" id="fechaTurnos" [(ngModel)]="fechaSeleccionada" (change)="cargarTurnos()" />
+  </div>
+
+  <!-- Tabla de PrimeNG -->
+  <p-table [value]="turnos" [loading]="cargando" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Fecha y Hora</th>
+        <th>Paciente</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-turno>
+      <tr>
+        <td>{{ turno.fecha_hora | date:'short' }}</td>
+        <td>{{ turno.paciente?.nombres }} {{ turno.paciente?.apellidos }}</td>
+        <td>
+          <span [class]="'badge ' + turno.estado.toLowerCase()">{{ turno.estado }}</span>
+        </td>
+        <td>
+          <p-button label="Atendido" severity="success" size="small" styleClass="p-mr-2"
+            (onClick)="cambiarEstado(turno.id, 'ATENDIDO')">
+          </p-button>
+          <p-button label="Ausente" severity="danger" size="small" (onClick)="cambiarEstado(turno.id, 'AUSENTE')">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" style="text-align: center;">No hay turnos registrados para la fecha seleccionada.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

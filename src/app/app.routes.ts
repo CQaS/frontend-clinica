@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Login } from './auth/login/login'; // <-- Apuntamos al nuevo componente modular
+import { Login } from './auth/login/login';
 import { MisTurnosPaciente } from './paciente/mis-turnos';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ReservarTurnoPaciente } from './paciente/reservar-turno';
@@ -34,13 +34,13 @@ export const routes: Routes = [
   },
 
   // ---------- ADMINISTRADOR ----------
-  { 
-    path: 'admin-dashboard', 
+  {
+    path: 'admin-dashboard',
     component: AdminDashboardComponent,
     canActivate: [roleGuard],
-    data: { role: 'ADMINISTRADOR' }
+    data: { role: 'ADMINISTRADOR' },
   },
 
   // Ruta comodín para redirigir URLs mal escritas al login
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];

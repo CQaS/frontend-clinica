@@ -1,10 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { LoginApiClient } from './login-api-cliente';
+import { LoginApiClient } from '../../servicios/login-api.service';
 import { AuthStore } from '../auth.store';
 
 @Component({
@@ -12,18 +18,18 @@ import { AuthStore } from '../auth.store';
   standalone: true,
   imports: [ReactiveFormsModule, PasswordModule, ButtonModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class Login {
-  private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
-  private readonly loginApiClient = inject(LoginApiClient);
-  private readonly authStore = inject(AuthStore);
-  private readonly messageService = inject(MessageService);
+  private readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly router: Router = inject(Router);
+  private readonly loginApiClient: LoginApiClient = inject(LoginApiClient);
+  private readonly authStore: AuthStore = inject(AuthStore);
+  private readonly messageService: MessageService = inject(MessageService);
 
   form: FormGroup = this.fb.group({
-    nombre: new FormControl(null, Validators.required),
-    clave: new FormControl(null, Validators.required)
+    email: new FormControl(null, Validators.required),
+    clave: new FormControl(null, Validators.required),
   });
 
   iniciarSesion() {
@@ -35,8 +41,13 @@ export class Login {
         this.router.navigateByUrl('/paciente');
       },
       error: (err: any) => {
-        console.error('Error al iniciar sesión', err);
-      }
+        console.error('Error al iniciar sesión:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Usuario o contraseña incorrectos',
+        });
+      },
     });
   }
 }
