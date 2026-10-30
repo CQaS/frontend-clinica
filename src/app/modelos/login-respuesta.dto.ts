@@ -1,13 +1,16 @@
-export interface LoginRespuestaDto {
-    access_token: string;
+import { EstadoUsuario } from '../enum/estado-usuario.enum';
+import { RolUsuario } from '../enum/rol-usuario.enum';
 
-    usuario: {
-        id: number;
-        documento: string;
-        apellidos: string;
-        nombres: string;
-        email: string;
-        estado: string;
-        rol: string;
-    }
+export interface LoginRespuestaDto {
+  access_token: string;
+
+  usuario: {
+    id: number;
+    documento: string;
+    apellidos: string;
+    nombres: string;
+    email: string;
+    estado: EstadoUsuario;
+    rol: RolUsuario;
+  };
 }
