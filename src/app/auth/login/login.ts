@@ -37,7 +37,7 @@ export class Login {
 
     this.loginApiClient.login(this.form.value).subscribe({
       next: (res: any) => {
-        this.authStore.guardarToken(res.accessToken);
+        this.authStore.guardarToken(res.access_token);
         this.router.navigateByUrl('/paciente');
       },
       error: (err: any) => {
