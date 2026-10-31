@@ -10,7 +10,12 @@ export function authInterceptor(
   const authStore = inject(AuthStore);
   const authToken = authStore.obtenerToken();
 
+  console.log('Token obtenido en el interceptor:', authToken);
+
   if (!authToken) {
+    console.warn(
+      '¡Atención! La petición va sin token porque authToken está vacío.',
+    );
     return next(req);
   }
 
