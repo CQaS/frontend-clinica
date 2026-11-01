@@ -18,6 +18,7 @@ import { EstadoReserva } from '../enum/estado-reserva.enum';
 export class AgendaComponent implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly medicoServicio = inject(MedicoServicio);
+  readonly estadoReserva = EstadoReserva;
 
   fechaSeleccionada: string = new Date().toISOString().split('T')[0];
   turnos: ReservaDto[] = [];

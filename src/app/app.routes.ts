@@ -5,6 +5,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ReservarTurnoPaciente } from './paciente/reservar-turno';
 import { roleGuard } from './guards/role.guard';
 import { LayoutComponent } from './templates/layout/layout.component';
+import { AgendaComponent } from './medico/agenda.component';
 
 export const routes: Routes = [
   // Redirección inicial → Login
@@ -14,7 +15,6 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [roleGuard], // El guard general o por sección
     children: [
       // ---------- PACIENTE ----------
       {
@@ -34,8 +34,8 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { role: 'MEDICO' },
         children: [
-          { path: 'mis-turnos', component: MisTurnosPaciente },
-          { path: '', redirectTo: 'mis-turnos', pathMatch: 'full' },
+          { path: 'agenda', component: AgendaComponent },
+          { path: '', redirectTo: 'agenda', pathMatch: 'full' },
         ],
       },
 

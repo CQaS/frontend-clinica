@@ -26,9 +26,10 @@
         </td>
         <td>
           <p-button label="Atendido" severity="success" size="small" styleClass="p-mr-2"
-            (onClick)="cambiarEstado(turno.id, 'ATENDIDO')">
+            (onClick)="cambiarEstado(turno.id, estadoReserva.ATENDIDO)">
           </p-button>
-          <p-button label="Ausente" severity="danger" size="small" (onClick)="cambiarEstado(turno.id, 'AUSENTE')">
+          <p-button label="Ausente" severity="danger" size="small"
+            (onClick)="cambiarEstado(turno.id, estadoReserva.AUSENTE)">
           </p-button>
         </td>
       </tr>
