@@ -12,6 +12,10 @@ export class AuthStore {
     sessionStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  guardarUsuario(usuario: string): void {
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+  }
+
   obtenerToken(): string | null {
     return sessionStorage.getItem(this.TOKEN_KEY);
   }
@@ -19,5 +23,18 @@ export class AuthStore {
   limpiar(): void {
     sessionStorage.removeItem(this.TOKEN_KEY);
     this.router.navigateByUrl('/login');
+  }
+
+  obtenerRol(): string | null {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      try {
+        const usuario = JSON.parse(usuarioGuardado);
+        return usuario.rol || null;
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
   }
 }

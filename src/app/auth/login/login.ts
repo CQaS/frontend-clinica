@@ -38,7 +38,24 @@ export class Login {
     this.loginApiClient.login(this.form.value).subscribe({
       next: (res: any) => {
         this.authStore.guardarToken(res.access_token);
-        this.router.navigateByUrl('/paciente');
+        this.authStore.guardarUsuario(res.usuario);
+
+        const rol = res.usuario.rol;
+        console.log('Rol del usuario:', rol);
+
+        if (rol === 'PACIENTE') {
+          console.log('Redirigiendo a mis-turnos');
+          this.router.navigateByUrl('/paciente/mis-turnos');
+        } else if (rol === 'MEDICO') {
+          console.log('Redirigiendo a agenda');
+          this.router.navigateByUrl('/medico/agenda');
+        } else if (rol === 'ADMINISTRADOR') {
+          console.log('Redirigiendo a admin-dashboard');
+          this.router.navigateByUrl('/admin-dashboard');
+        } else {
+          console.error('Rol de usuario desconocido:', rol);
+          this.router.navigateByUrl('/login');
+        }
       },
       error: (err: any) => {
         console.error('Error al iniciar sesión:', err);
