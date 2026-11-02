@@ -17,7 +17,8 @@
 <tbody>
     <tr *ngFor="let medico of medicos">
         <td>{{ medico.id }}</td>
-        <td>{{ medico.nombre }}</td>
+        <td>{{ medico.nombres }}
+            {{medico.apellidos}}</td>
         <td>${{ medico.valor_consulta }}</td>
         <td>
 
@@ -30,7 +31,7 @@
         />
         <button
         (click)="actualizarPrecio(medico.id, precio.valueAsNumber)"
-        [disabled]="!precio.value || precio.valueAsNumber <= 0"
+        [disabled]="false"
         >
         Actualizar
     </button>
@@ -97,7 +98,8 @@
     >
     <option [ngValue]="null" disabled>Seleccioná un médico</option>
       <option *ngFor="let medico of medicos" [ngValue]="medico.id">
-        {{ medico.nombre }}
+        {{ medico.nombres }}
+        {{medico.apellidos}}
     </option>
     </select>
 

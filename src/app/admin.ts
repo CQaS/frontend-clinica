@@ -33,7 +33,7 @@ export class AdminService {
   ): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/medicos/${medicoId}/valor-consulta`,
-      { valor_consulta: nuevoValor },
+      { valorConsulta: nuevoValor },
       { headers: this.obtenerHeaders() }
     );
   }
