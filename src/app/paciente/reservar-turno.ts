@@ -17,7 +17,7 @@ export class ReservarTurnoPaciente implements OnInit{
     fechaSeleccionada:string = '';
     horaSeleccionada:string ='';
 
-    medicos:string[]=['Dr. Pérez', 'Dra. Gómez', 'Dr. Rodríguez'];
+    medicos:any[] = [];
     horariosDisponibles:string[]=['08:00', '09:00', '10:00', '11:00', '14:00', '15:00'];
 
     minFecha:string = '';
@@ -25,6 +25,7 @@ export class ReservarTurnoPaciente implements OnInit{
 
     ngOnInit() {
         this.calcularFechasPermitidas();
+        this.cargarMedicos();
     }
 
     calcularFechasPermitidas() {
@@ -36,19 +37,30 @@ export class ReservarTurnoPaciente implements OnInit{
         this.maxFecha = maxDias.toISOString().split('T')[0];
     }
 
+    cargarMedicos() {
+        this.reservasService.obtenerMedicos().subscribe({
+            next: (datos) => {
+                this.medicos = datos;
+                console.log('Medicos cargados:', datos);
+            },
+            error:(err) => {
+                console.error('Error al cargar médicos:', err);
+                alert('No se pudieron cargar los médicos.');
+            }
+        });
+    }
+
     confirmarReserva(){
         if (!this.medicoSeleccionado || !this.fechaSeleccionada || !this.horaSeleccionada){
             alert('Por favor completa todos los campos.');
             return;
         }
 
-        let idMedicoNum = 1;
-        if (this.medicoSeleccionado === 'Dra. Gómez') idMedicoNum = 2;
-        if (this.medicoSeleccionado === 'Dr. Rodríguez') idMedicoNum = 3;
+        const idMedicoNum = Number(this.medicoSeleccionado);
 
         const nuevoTurno = {
         idMedico: idMedicoNum,
-        fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00.000Z`, 
+        fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00`, 
     };
 
     this.reservasService.crearTurno(nuevoTurno).subscribe({

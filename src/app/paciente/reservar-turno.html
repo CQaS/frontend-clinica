@@ -6,7 +6,7 @@
             <label for="medico" class="form-label">Seleccionar Médico:</label>
             <select id="medico" class="form-select" [(ngModel)]="medicoSeleccionado" name="medico" required>
                 <option value="" disabled>Seleccione un profesional</option>
-                <option *ngFor="let m of medicos" [value]="m">{{ m}}</option>
+                <option *ngFor="let m of medicos" [value]="m.id">{{ m.nombres }} {{ m.apellidos }}</option>
             </select>
         </div>
 

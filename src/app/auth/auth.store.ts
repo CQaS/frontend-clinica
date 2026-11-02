@@ -30,6 +30,7 @@ export class AuthStore {
     if (usuarioGuardado) {
       try {
         const usuario = JSON.parse(usuarioGuardado);
+        console.log('Rol guardado:', usuario.rol);
         return usuario.rol || null;
       } catch (e) {
         return null;

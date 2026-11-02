@@ -12,6 +12,8 @@ export function authInterceptor(
 
   console.log('Token obtenido en el interceptor:', authToken);
 
+  console.log('Longitud del token:', authToken?.length);
+
   if (!authToken) {
     console.warn(
       '¡Atención! La petición va sin token porque authToken está vacío.',
