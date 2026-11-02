@@ -1,17 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 import { ReservasService } from '../servicios/reservas.service';
 import { RouterLink } from '@angular/router';
-
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './mis-turnos.html',
-  styleUrls: ['./mis-turnos.css']
+  styleUrls: ['./mis-turnos.css'],
 })
 export class MisTurnosPaciente implements OnInit {
+  private readonly messageService = inject(MessageService);
   private readonly reservasService = inject(ReservasService);
   turnos: any[] = [];
 
@@ -19,7 +20,7 @@ export class MisTurnosPaciente implements OnInit {
     this.cargarTurnos();
   }
 
-  cargarTurnos(){
+  cargarTurnos() {
     this.reservasService.obtenerTurnos().subscribe({
       next: (datos) => {
         this.turnos = datos;
@@ -29,35 +30,44 @@ export class MisTurnosPaciente implements OnInit {
     });
   }
 
-  puedeCancelar(turno:any):boolean{
-    if (turno.estado !=='ACTIVO'){
+  puedeCancelar(turno: any): boolean {
+    if (turno.estado !== 'ACTIVO') {
       return false;
     }
 
     const fechaTurno = new Date(turno.fechaHora);
     const hoy = new Date();
 
-    fechaTurno.setHours(0,0,0,0);
-    hoy.setHours(0,0,0,0);
+    fechaTurno.setHours(0, 0, 0, 0);
+    hoy.setHours(0, 0, 0, 0);
 
     return fechaTurno.getTime() > hoy.getTime();
-    
   }
 
-  cancelarTurno(id:string){
-    if (confirm('Estás seguro de que deseas cancelar este turno?')){
+  cancelarTurno(id: string) {
+    if (confirm('Estás seguro de que deseas cancelar este turno?')) {
       this.reservasService.cancelarTurno(id).subscribe({
-        next:() => {
-          alert('El turno fue cancelado correctamente.');
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Turno cancelado',
+            detail: 'Tu turno ha sido cancelado exitosamente.',
+          });
           this.cargarTurnos();
         },
-        error:(err)=> {
-        console.error('Error al cancelar el turno:', err);
+        error: (err) => {
+          console.error('Error al cancelar el turno:', err);
 
-        const mensaje = err.error?.message || 'No se pudo cancelar el turno. Intentá nuevamente.';
+          const mensaje =
+            err.error?.message ||
+            'No se pudo cancelar el turno. Intentá nuevamente.';
 
-        alert(mensaje);
-      }
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: mensaje,
+          });
+        },
       });
     }
   }

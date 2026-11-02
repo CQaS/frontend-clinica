@@ -1,116 +1,128 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ReservasService } from '../servicios/reservas.service';
+import { MedicoServicio } from '../servicios/medico.service';
 
 @Component({
-    selector: 'app-reservar-turno',
-    standalone:true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './reservar-turno.html',
-    styleUrls: ['./reservar-turno.css']
+  selector: 'app-reservar-turno',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './reservar-turno.html',
+  styleUrls: ['./reservar-turno.css'],
 })
-export class ReservarTurnoPaciente implements OnInit{
-    private readonly reservasService = inject(ReservasService);
+export class ReservarTurnoPaciente implements OnInit {
+  private readonly messageService = inject(MessageService);
+  private readonly reservasService = inject(ReservasService);
+  private readonly medicoServicio = inject(MedicoServicio);
 
-    medicoSeleccionado:string ='';
-    fechaSeleccionada:string = '';
-    horaSeleccionada:string ='';
+  medicos: any[] = [];
+  medicoSeleccionadoId: number | null = null;
 
-    medicos:any[] = [];
-    horariosBase: string[] = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
-    horariosDisponibles:string[]=[...this.horariosBase];
+  fechaSeleccionada: string = '';
+  horaSeleccionada: string = '';
 
-    minFecha:string = '';
-    maxFecha:string = '';
+  horariosDisponibles: string[] = [
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00', // Este turno termina a las 16:00 hs
+  ];
 
-    ngOnInit() {
-        this.calcularFechasPermitidas();
-        this.cargarMedicos();
-    }
+  minFecha: string = '';
+  maxFecha: string = '';
 
-    calcularFechasPermitidas() {
-        const hoy = new Date();
+  ngOnInit() {
+    this.calcularFechasPermitidas();
+    this.cargarMedicos();
+  }
 
-        const formatoFecha = (fecha:Date)=> {
-            const año = fecha.getFullYear();
-            const mes = String(fecha.getMonth() + 1).padStart(2,'0');
-            const dia = String(fecha.getDate()).padStart(2,'0');
-        return `${año}-${mes}-${dia}`;
-        };
-
-        this.minFecha = formatoFecha(hoy);
-
-        const maxDias = new Date(hoy);
-        maxDias.setDate(maxDias.getDate()+30);
-        this.maxFecha = formatoFecha(maxDias);
-    }
-
-    cargarMedicos() {
-        this.reservasService.obtenerMedicos().subscribe({
-            next: (datos) => {
-                this.medicos = datos;
-                console.log('Medicos cargados:', datos);
-            },
-            error:(err) => {
-                console.error('Error al cargar médicos:', err);
-                alert('No se pudieron cargar los médicos.');
-            }
+  cargarMedicos() {
+    this.medicoServicio.obtenerMedicos().subscribe({
+      next: (data) => {
+        this.medicos = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar médicos:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'No se pudieron cargar los médicos. Intenta nuevamente más tarde.',
         });
+      },
+    });
+  }
+
+  calcularFechasPermitidas() {
+    const hoy = new Date();
+    this.minFecha = hoy.toISOString().split('T')[0];
+
+    const maxDias = new Date();
+    maxDias.setDate(hoy.getDate() + 30);
+    this.maxFecha = maxDias.toISOString().split('T')[0];
+  }
+
+  confirmarReserva() {
+    if (
+      !this.medicoSeleccionadoId ||
+      !this.fechaSeleccionada ||
+      !this.horaSeleccionada
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Campos incompletos',
+        detail: 'Por favor, completa todos los campos antes de reservar.',
+      });
+      return;
     }
 
-    cargarDisponibilidad() {
-        if (!this.medicoSeleccionado || !this.fechaSeleccionada) {
-            this.horariosDisponibles = [...this.horariosBase];
-            this.horaSeleccionada = '';
-            return;
-        }
+    // 1. Recuperamos el ID del paciente logueado desde el localStorage
+    const usuarioGuardado = localStorage.getItem('usuario');
+    const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+    const pacienteId = usuario ? usuario.id : null;
 
-        this.reservasService.obtenerDisponibilidad(
-            Number(this.medicoSeleccionado), this.fechaSeleccionada).subscribe({
-                next: (ocupados)=> {
-                    this.horariosDisponibles = this.horariosBase.filter(
-                        hora=> !ocupados.includes(hora));
-
-                        if (!this.horariosDisponibles.includes(this.horaSeleccionada)) {
-                            this.horaSeleccionada = '';
-                        }
-                },
-                error: (err)=> {
-                    console.error('Error al consultar disponibilidad', err);
-                    this.horariosDisponibles = [];
-                    this.horaSeleccionada ='';
-                    alert('No se pudo consultar la disponibilidad. Intentá nuevamente.');
-                }
-            });
+    if (!pacienteId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo recuperar la información del paciente.',
+      });
+      return;
     }
 
-    confirmarReserva(){
-        if (!this.medicoSeleccionado || !this.fechaSeleccionada || !this.horaSeleccionada){
-            alert('Por favor completa todos los campos.');
-            return;
-        }
-
-        const idMedicoNum = Number(this.medicoSeleccionado);
-
-        const nuevoTurno = {
-        idMedico: idMedicoNum,
-        fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00`, 
+    const nuevoTurno = {
+      medicoId: Number(this.medicoSeleccionadoId),
+      pacienteId: Number(pacienteId),
+      fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00`,
     };
 
-    this.reservasService.crearTurno(nuevoTurno).subscribe({
-        next: () => {
-            alert('Turno reservado con éxito.');
-            this.medicoSeleccionado = '';
-            this.fechaSeleccionada = '';
-            this.horaSeleccionada = '';
-        },
-        error: (err) =>{
-            console.error('Error al registrar el turno:', err);
+    console.log('Enviando turno:', nuevoTurno); // Para depurar en consola si hace falta
 
-            const mensaje = err.error?.message || 'No se pudo procesar la reserva. Intentá nuevamente.';
-            alert(mensaje);
-        }
+    this.reservasService.crearTurno(nuevoTurno).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Turno reservado',
+          detail: 'Tu turno ha sido reservado exitosamente.',
+        });
+        this.medicoSeleccionadoId = null;
+        this.fechaSeleccionada = '';
+        this.horaSeleccionada = '';
+      },
+      error: (err) => {
+        console.error('Error al registrar el turno:', err.error.message);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `No se pudo registrar el turno. Razón: ${err.error.message || 'Error desconocido'}.`,
+        });
+      },
     });
-}
+  }
 }
