@@ -48,9 +48,16 @@ export class MisTurnosPaciente implements OnInit {
     if (confirm('Estás seguro de que deseas cancelar este turno?')){
       this.reservasService.cancelarTurno(id).subscribe({
         next:() => {
+          alert('El turno fue cancelado correctamente.');
           this.cargarTurnos();
         },
-        error:(err)=> console.error('Error al cancelar el turno:', err)
+        error:(err)=> {
+        console.error('Error al cancelar el turno:', err);
+
+        const mensaje = err.error?.message || 'No se pudo cancelar el turno. Intentá nuevamente.';
+
+        alert(mensaje);
+      }
       });
     }
   }

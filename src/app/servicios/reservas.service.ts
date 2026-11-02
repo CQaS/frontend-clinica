@@ -10,6 +10,18 @@ export class ReservasService {
 
     constructor(private http: HttpClient) {}
 
+    obtenerDisponibilidad(idMedico: number, fecha: string): Observable<string[]>{
+        return this.http.get<string[]>(`${this.apiUrl}/disponibilidad`,
+            {
+                params: {
+                    idMedico: idMedico.toString(),
+                    fecha: fecha
+                }
+            }
+        );
+    }
+    
+
     obtenerTurnos(): Observable<any[]> {
         return this.http.get<any[]>(this.apiUrl);
     }

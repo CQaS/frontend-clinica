@@ -4,11 +4,14 @@
 
     <a routerLink="/paciente/reservar" class="btn btn-success mb-3">+ Reservar Nuevo Turno</a>
 
-  <div *ngIf="turnos.length === 0" class="alert alert-info">
+  @if (turnos.length === 0) {
+  <div class="alert alert-info">
     No tenes turnos registrados.
   </div>
-
-  <table class="table table-striped" *ngIf="turnos.length > 0">
+  }
+  
+  @if (turnos.length > 0) {
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Fecha</th>
@@ -19,20 +22,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let turno of turnos">
+      @for (turno of turnos; track turno.id){
+      <tr>
         <td>{{ turno.fechaHora | date:'short'}}</td>
         <td>{{ turno.nombreMedico }}</td>
         <td>{{ turno.valorConsulta | currency:'ARS':'symbol':'1.0-0' }}</td>
         <td>{{ turno.estado }}</td>
         <td>
+          @if (puedeCancelar(turno)){
           <button
-            *ngIf="puedeCancelar(turno)"
             class="btn btn-danger btn-sm"
             (click)="cancelarTurno(turno.id)">
             Cancelar Turno
           </button>
+        }
         </td>
       </tr>
+      }
     </tbody>
   </table>
+  }
 </div>
