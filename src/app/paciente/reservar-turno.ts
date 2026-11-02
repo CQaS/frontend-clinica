@@ -18,7 +18,8 @@ export class ReservarTurnoPaciente implements OnInit{
     horaSeleccionada:string ='';
 
     medicos:any[] = [];
-    horariosDisponibles:string[]=['08:00', '09:00', '10:00', '11:00', '14:00', '15:00'];
+    horariosBase: string[] = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
+    horariosDisponibles:string[]=[...this.horariosBase];
 
     minFecha:string = '';
     maxFecha:string = '';
@@ -30,11 +31,19 @@ export class ReservarTurnoPaciente implements OnInit{
 
     calcularFechasPermitidas() {
         const hoy = new Date();
-        this.minFecha = hoy.toISOString().split('T')[0];
 
-        const maxDias = new Date();
-        maxDias.setDate(hoy.getDate()+30);
-        this.maxFecha = maxDias.toISOString().split('T')[0];
+        const formatoFecha = (fecha:Date)=> {
+            const año = fecha.getFullYear();
+            const mes = String(fecha.getMonth() + 1).padStart(2,'0');
+            const dia = String(fecha.getDate()).padStart(2,'0');
+        return `${año}-${mes}-${dia}`;
+        };
+
+        this.minFecha = formatoFecha(hoy);
+
+        const maxDias = new Date(hoy);
+        maxDias.setDate(maxDias.getDate()+30);
+        this.maxFecha = formatoFecha(maxDias);
     }
 
     cargarMedicos() {
@@ -48,6 +57,32 @@ export class ReservarTurnoPaciente implements OnInit{
                 alert('No se pudieron cargar los médicos.');
             }
         });
+    }
+
+    cargarDisponibilidad() {
+        if (!this.medicoSeleccionado || !this.fechaSeleccionada) {
+            this.horariosDisponibles = [...this.horariosBase];
+            this.horaSeleccionada = '';
+            return;
+        }
+
+        this.reservasService.obtenerDisponibilidad(
+            Number(this.medicoSeleccionado), this.fechaSeleccionada).subscribe({
+                next: (ocupados)=> {
+                    this.horariosDisponibles = this.horariosBase.filter(
+                        hora=> !ocupados.includes(hora));
+
+                        if (!this.horariosDisponibles.includes(this.horaSeleccionada)) {
+                            this.horaSeleccionada = '';
+                        }
+                },
+                error: (err)=> {
+                    console.error('Error al consultar disponibilidad', err);
+                    this.horariosDisponibles = [];
+                    this.horaSeleccionada ='';
+                    alert('No se pudo consultar la disponibilidad. Intentá nuevamente.');
+                }
+            });
     }
 
     confirmarReserva(){
@@ -72,7 +107,9 @@ export class ReservarTurnoPaciente implements OnInit{
         },
         error: (err) =>{
             console.error('Error al registrar el turno:', err);
-            alert('Hubo un error al procesar la reserva.');
+
+            const mensaje = err.error?.message || 'No se pudo procesar la reserva. Intentá nuevamente.';
+            alert(mensaje);
         }
     });
 }
