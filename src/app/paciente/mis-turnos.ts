@@ -30,11 +30,11 @@ export class MisTurnosPaciente implements OnInit {
   }
 
   puedeCancelar(turno:any):boolean{
-    if (turno.estado !=='Active'){
+    if (turno.estado !=='ACTIVO'){
       return false;
     }
 
-    const fechaTurno = new Date(turno.fecha);
+    const fechaTurno = new Date(turno.fechaHora);
     const hoy = new Date();
 
     fechaTurno.setHours(0,0,0,0);

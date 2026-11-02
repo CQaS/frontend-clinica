@@ -14,19 +14,23 @@ export class ReservasService {
         return this.http.get<any[]>(this.apiUrl);
     }
 
+    obtenerMedicos(): Observable<any[]> {
+        return this.http.get<any[]>('/api/v1/medicos');
+    }
+
     crearTurno(turnoData:any): Observable<any> {
         const token = localStorage.getItem('token');
 
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${'token'}`
+            'Authorization': `Bearer ${token}`
         });
 
         return this.http.post<any>(this.apiUrl, turnoData, { headers });
     }
 
     cancelarTurno(id:string): Observable<any> {
-        return this.http.put<any>(`${this.apiUrl}/cancelar/${id}`, {});
+        return this.http.patch<any>(`${this.apiUrl}/${id}/cancelar`, {});
     }
 
 }

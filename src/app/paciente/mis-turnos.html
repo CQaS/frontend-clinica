@@ -13,19 +13,21 @@
       <tr>
         <th>Fecha</th>
         <th>Médico</th>
+        <th>Valor de consulta</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let turno of turnos">
-        <td>{{ turno.fecha | date:'short}}</td>
-        <td>{{ turno.medico }}</td>
+        <td>{{ turno.fechaHora | date:'short'}}</td>
+        <td>{{ turno.nombreMedico }}</td>
+        <td>{{ turno.valorConsulta | currency:'ARS':'symbol':'1.0-0' }}</td>
         <td>{{ turno.estado }}</td>
         <td>
           <button
+            *ngIf="puedeCancelar(turno)"
             class="btn btn-danger btn-sm"
-            [disabled]="!puedeCancelar(turno)"
             (click)="cancelarTurno(turno.id)">
             Cancelar Turno
           </button>
