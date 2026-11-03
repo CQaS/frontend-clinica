@@ -2,7 +2,7 @@
   <div class="container mt-4">
   <h2>Mis Turnos</h2>
 
-    <a routerLink="/paciente/reservar" class="btn btn-success mb-3">+ Reservar Nuevo Turno</a>
+    <a routerLink="/paciente/reservar" class="btn btn-success mb-3">Reservar Nuevo Turno</a>
 
   @if (turnos.length === 0) {
   <div class="alert alert-info">
@@ -23,11 +23,17 @@
     </thead>
     <tbody>
       @for (turno of turnos; track turno.id){
+        
       <tr>
         <td>{{ turno.fechaHora | date:'short'}}</td>
         <td>{{ turno.nombreMedico }}</td>
         <td>{{ turno.valorConsulta | currency:'ARS':'symbol':'1.0-0' }}</td>
-        <td>{{ turno.estado }}</td>
+        <td class="align-middle text-center">
+        <span [style.color]="turno.estado === 'CANCELADO' ? 'red' : 'green'"
+        class="fw-bold">
+                {{ turno.estado }}
+            </span>
+            </td>
         <td>
           @if (puedeCancelar(turno)){
           <button
