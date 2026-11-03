@@ -46,6 +46,7 @@ input:focus,
 select:focus {
     outline: 2px solid #b8d4f5;
     border-color: #4778b8;
+    color: #000;
 }
 
 table {
