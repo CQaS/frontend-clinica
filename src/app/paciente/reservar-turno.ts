@@ -18,7 +18,7 @@ export class ReservarTurnoPaciente implements OnInit {
   private readonly medicoServicio = inject(MedicoServicio);
 
   medicos: any[] = [];
-  medicoSeleccionadoId: number | null = null;
+  medicoSeleccionadoId: any = "";
 
   fechaSeleccionada: string = '';
   horaSeleccionada: string = '';
