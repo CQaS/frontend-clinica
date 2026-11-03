@@ -2,10 +2,19 @@
   style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #ec49c9; border-bottom: 1px solid #dee2e6;">
   <h1 id="nombre-de-proyecto" style="margin: 0; font-size: 1.25rem;">Clínica Médica - Sistema de Gestión</h1>
 
-  <button type="button" (click)="cerrarSesion()" style="
-      background-color: #ffffff; color: #ec49c9; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;" >
-    Cerrar sesión
-  </button>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    @if (nombreUsuario) {
+    <div id="usuario-logueado"
+      style="background: #eef2f7; padding: 8px 15px; border-radius: 6px; border: 1px solid #d1d9e0; font-size: 15px; color: #333;">
+      <strong>{{ etiquetaRol }}:</strong> {{ nombreUsuario }}
+    </div>
+    }
+
+    <button type="button" (click)="cerrarSesion()" style="
+        background-color: #ffffff; color: #ec49c9; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;" >
+      Cerrar sesión
+    </button>
+  </div>
 
 </header>
 

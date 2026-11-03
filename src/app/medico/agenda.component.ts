@@ -7,7 +7,6 @@ import { MessageService } from 'primeng/api';
 import { MedicoServicio } from '../servicios/medico.service';
 import { ReservaDto } from '../modelos/reserva.dto';
 import { EstadoReserva } from '../enum/estado-reserva.enum';
-import { AuthStore } from '../auth/auth.store';
 
 @Component({
   selector: 'app-agenda',
@@ -17,7 +16,6 @@ import { AuthStore } from '../auth/auth.store';
   styleUrl: './agenda.component.css',
 })
 export class AgendaComponent implements OnInit {
-  private readonly authStore = inject(AuthStore);
   private readonly messageService = inject(MessageService);
   private readonly medicoServicio = inject(MedicoServicio);
   readonly estadoReserva = EstadoReserva;
@@ -28,18 +26,6 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTurnos();
-  }
-
-  get nombreMedico(): string {
-    const usuario = this.authStore.obtenerUsuario();
-    if (!usuario) return 'Médico';
-
-    const nombresCompletos =
-      `${usuario.nombres || ''} ${usuario.apellidos || ''}`.trim();
-
-    if (!nombresCompletos) return 'Médico';
-
-    return `Dra. ${nombresCompletos}`;
   }
 
   cargarTurnos(): void {
