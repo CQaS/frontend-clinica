@@ -20,6 +20,18 @@ export class AuthStore {
     return sessionStorage.getItem(this.TOKEN_KEY);
   }
 
+  obtenerUsuario(): any | null {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      try {
+        return JSON.parse(usuarioGuardado);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   limpiar(): void {
     sessionStorage.removeItem(this.TOKEN_KEY);
     this.router.navigateByUrl('/login');
