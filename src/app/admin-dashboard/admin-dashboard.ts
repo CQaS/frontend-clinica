@@ -53,6 +53,8 @@ fechaMaxima = this.formatoFechaLocal(
 }
   
   actualizarPrecio(medicoId: number, precio: number) {
+    console.log('Token:',
+      localStorage.getItem('token'));
   if (!Number.isInteger(precio) || precio <= 0) {
     alert('Ingresá un valor de consulta entero y mayor que cero.');
     return;
