@@ -31,7 +31,7 @@ export class ReservarTurnoPaciente implements OnInit {
     '12:00',
     '13:00',
     '14:00',
-    '15:00', // Este turno termina a las 16:00 hs
+    '15:00',
   ];
 
   minFecha: string = '';
@@ -82,7 +82,7 @@ export class ReservarTurnoPaciente implements OnInit {
       return;
     }
 
-    // 1. Recuperamos el ID del paciente logueado desde el localStorage
+    
     const usuarioGuardado = localStorage.getItem('usuario');
     const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
     const pacienteId = usuario ? usuario.id : null;
@@ -97,12 +97,12 @@ export class ReservarTurnoPaciente implements OnInit {
     }
 
     const nuevoTurno = {
-      medicoId: Number(this.medicoSeleccionadoId),
-      pacienteId: Number(pacienteId),
+      idMedico: Number(this.medicoSeleccionadoId),
+      idPaciente: Number(pacienteId),
       fechaHora: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00`,
     };
 
-    console.log('Enviando turno:', nuevoTurno); // Para depurar en consola si hace falta
+    console.log('Enviando turno:', nuevoTurno); 
 
     this.reservasService.crearTurno(nuevoTurno).subscribe({
       next: () => {
