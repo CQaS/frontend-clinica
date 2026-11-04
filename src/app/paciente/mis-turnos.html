@@ -1,51 +1,51 @@
 <div style="padding: 2rem;">
   <div class="container mt-4">
-  <h2>Mis Turnos</h2>
+    <h2>Mis Turnos</h2>
 
-    <a routerLink="/paciente/reservar" class="btn btn-success mb-3">Reservar Nuevo Turno</a>
+    <a routerLink="/paciente/reservar"
+      style="display: inline-block; background-color: #28a745; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500; font-family: inherit; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background-color 0.2s;"
+      onmouseover="this.style.backgroundColor='#218838'" onmouseout="this.style.backgroundColor='#28a745'">Reservar
+      Nuevo Turno</a>
 
-  @if (turnos.length === 0) {
-  <div class="alert alert-info">
-    No tenes turnos registrados.
-  </div>
-  }
-  
-  @if (turnos.length > 0) {
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Médico</th>
-        <th>Valor de consulta</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (turno of turnos; track turno.id){
-        
-      <tr>
-        <td>{{ turno.fechaHora | date:'short'}}</td>
-        <td>{{ turno.nombreMedico }}</td>
-        <td>{{ turno.valorConsulta | currency:'ARS':'symbol':'1.0-0' }}</td>
-        <td class="align-middle text-center">
-        <span [style.color]="turno.estado === 'CANCELADO' ? 'red' : 'green'"
-        class="fw-bold">
-                {{ turno.estado }}
+    @if (turnos.length === 0) {
+    <div class="alert alert-info">
+      No tenes turnos registrados.
+    </div>
+    }
+
+    @if (turnos.length > 0) {
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Médico</th>
+          <th>Valor de consulta</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (turno of turnos; track turno.id){
+
+        <tr>
+          <td>{{ turno.fechaHora | date:'short'}}</td>
+          <td>{{ turno.nombreMedico }}</td>
+          <td>{{ turno.valorConsulta | currency:'ARS':'symbol':'1.0-0' }}</td>
+          <td class="align-middle text-center">
+            <span [style.color]="turno.estado === 'CANCELADO' ? 'red' : 'green'" class="fw-bold">
+              {{ turno.estado }}
             </span>
-            </td>
-        <td>
-          @if (puedeCancelar(turno)){
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="cancelarTurno(turno.id)">
-            Cancelar Turno
-          </button>
+          </td>
+          <td>
+            @if (puedeCancelar(turno)){
+            <button class="btn btn-danger btn-sm" (click)="cancelarTurno(turno.id)">
+              Cancelar Turno
+            </button>
+            }
+          </td>
+        </tr>
         }
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
-  }
-</div>
+      </tbody>
+    </table>
+    }
+  </div>

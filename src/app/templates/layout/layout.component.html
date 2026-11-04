@@ -1,17 +1,27 @@
-<header id="header"
-  style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #ec49c9; border-bottom: 1px solid #dee2e6;">
-  <h1 id="nombre-de-proyecto" style="margin: 0; font-size: 1.25rem;">Clínica Médica - Sistema de Gestión</h1>
+<header id="header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #ec49c9;
+  border-bottom: 1px solid #dee2e6;">
 
-  <div style="display: flex; align-items: center; gap: 12px;">
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ab293a;">
+      <path d="M11 2v20M2 11h20" />
+    </svg>
+    <h1 id="nombre-de-proyecto" style="margin: 0; font-size: 1.2rem; font-weight: 600; letter-spacing: 0.5px;">
+      Clínica Médica <span style="font-weight: 300; font-size: 0.95rem; opacity: 0.8;">| Sistema de Gestión</span>
+    </h1>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 15px;">
     @if (nombreUsuario) {
     <div id="usuario-logueado"
-      style="background: #eef2f7; padding: 8px 15px; border-radius: 6px; border: 1px solid #d1d9e0; font-size: 15px; color: #333;">
-      <strong>{{ etiquetaRol }}:</strong> {{ nombreUsuario }}
+      style="background: rgba(255, 255, 255, 0.1); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); font-size: 14px; color: #ffffff;">
+      <strong style="color: #435263;">{{ etiquetaRol }}:</strong> {{ nombreUsuario }}
     </div>
     }
 
-    <button type="button" (click)="cerrarSesion()" style="
-        background-color: #ffffff; color: #ec49c9; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;" >
+    <button type="button" (click)="cerrarSesion()"
+      style="background-color: #ef4444; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background-color 0.2s;"
+      onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
       Cerrar sesión
     </button>
   </div>
