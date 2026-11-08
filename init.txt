@@ -18,3 +18,15 @@ ng serve -o
 
 En el Navegador deberia verse el json que responde el backend-clinica:
 http://localhost:4200/
+
+
+nginx:
+Descargar nginx.org/en/download.html
+Descomprimir en C:/nginx
+en la carpeta del proyecto frontend-clinica/ ejecutar: ng build
+
+en C:\nginx\conf\nginx.conf editar el bloque server, en root colocar la ruta que nos retorna ng build, ej: "c:\app\proyecto\dist\frontend-clinica\browser"
+
+En la consola en C:/nginx ejecutar: start nginx
+
+En http://localhost se vera la app
